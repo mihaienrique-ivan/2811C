@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Página sencilla</title>
+	<style>
+		:root{--bg:#f7f7fb;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--accent:#2563eb}
+		[data-theme="dark"]{--bg:#0b1220;--card:#071027;--text:#e6eef8;--muted:#9aa6bf;--accent:#60a5fa}
+		*{box-sizing:border-box}
+		body{margin:0;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+		.wrap{max-width:980px;margin:32px auto;padding:20px}
+		header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+		.brand{display:flex;align-items:center;gap:12px}
+		.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+		nav{display:flex;gap:12px;align-items:center}
+		nav a{color:var(--muted);text-decoration:none;font-size:0.95rem}
+		.hero{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+		.hero h1{margin:0 0 10px;font-size:1.6rem}
+		.hero p{margin:0 0 16px;color:var(--muted)}
+		.btn{background:var(--accent);color:#fff;padding:10px 14px;border:none;border-radius:8px;cursor:pointer}
+		.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+		.card{background:var(--card);padding:16px;border-radius:10px;box-shadow:0 6px 14px rgba(0,0,0,0.04)}
+		form{display:grid;gap:10px;margin-top:12px}
+		input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:transparent;color:var(--text)}
+		textarea{min-height:100px;resize:vertical}
+		footer{margin-top:20px;text-align:center;color:var(--muted);font-size:0.9rem}
+		.controls{display:flex;gap:10px;align-items:center}
+		.success{color:green;font-weight:600;margin-top:8px}
+		@media (max-width:520px){.wrap{margin:18px 12px}}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="brand">
+				<div class="logo">WS</div>
+				<div>
+					<div style="font-weight:700">Página sencilla</div>
+					<div style="font-size:0.85rem;color:var(--muted)">Un ejemplo rápido en HTML/CSS/JS</div>
+				</div>
+			</div>
+			<nav>
+				<a href="#features">Funciones</a>
+				<a href="#contact">Contacto</a>
+				<div class="controls">
+					<button id="themeBtn" class="btn" title="Alternar tema">Tema</button>
+				</div>
+			</nav>
+		</header>
+
+		<section class="hero">
+			<h1>Bienvenido — página web sencilla</h1>
+			<p>Esta es una plantilla mínima que incluye un tema claro/oscuro, secciones informativas y un formulario de contacto simulado.</p>
+			<div style="display:flex;gap:10px;margin-top:12px">
+				<button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contactar</button>
+				<a href="#features" style="align-self:center;color:var(--muted);text-decoration:none">Ver funciones →</a>
+			</div>
+
+			<div class="grid" id="features">
+				<div class="card">
+					<strong>Rápida</strong>
+					<div style="color:var(--muted);margin-top:6px">Cargamiento inmediato porque es solo HTML/CSS/JS.</div>
+				</div>
+				<div class="card">
+					<strong>Responsive</strong>
+					<div style="color:var(--muted);margin-top:6px">Se adapta a móviles, tablets y escritorio.</div>
+				</div>
+				<div class="card">
+					<strong>Interactiva</strong>
+					<div style="color:var(--muted);margin-top:6px">Tema claro/oscuro y formulario con confirmación visual.</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="contact" style="margin-top:18px">
+			<h2>Contacto</h2>
+			<div style="max-width:720px">
+				<form id="contactForm">
+					<input type="text" id="name" placeholder="Tu nombre" required />
+					<input type="email" id="email" placeholder="Tu correo" required />
+					<textarea id="message" placeholder="Tu mensaje" required></textarea>
+					<div style="display:flex;gap:10px;align-items:center">
+						<button type="submit" class="btn">Enviar</button>
+						<div id="status" aria-live="polite"></div>
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<footer>
+			Hecho con ❤️ — plantilla simple
+		</footer>
+	</div>
+
+	<script>
+		// Tema persistente
+		const root = document.documentElement;
+		const themeBtn = document.getElementById('themeBtn');
+		const saved = localStorage.getItem('theme');
+		if(saved) root.setAttribute('data-theme', saved);
+		themeBtn.addEventListener('click', () => {
+			const current = root.getAttribute('data-theme');
+			const next = current === 'dark' ? '' : 'dark';
+			if(next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
+			localStorage.setItem('theme', next);
+		});
+
+		// Manejo simple del formulario (sin backend)
+		const form = document.getElementById('contactForm');
+		const status = document.getElementById('status');
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			const name = document.getElementById('name').value.trim();
+			const email = document.getElementById('email').value.trim();
+			const message = document.getElementById('message').value.trim();
+			if(!name || !email || !message){
+				status.textContent = 'Por favor completa todos los campos.';
+				status.style.color = 'crimson';
+				return;
+			}
+			// Simular envío
+			status.style.color = 'green';
+			status.textContent = 'Mensaje enviado. ¡Gracias!';
+			form.reset();
+			setTimeout(()=> status.textContent = '', 4000);
+		});
+	</script>
+</body>
+</html>
